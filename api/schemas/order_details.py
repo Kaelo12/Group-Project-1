@@ -1,27 +1,27 @@
-from datetime import datetime
 from typing import Optional
-from pydantic import BaseModel
-from .sandwiches import Sandwich
+from decimal import Decimal
+from pydantic import BaseModel, ConfigDict
+from .menu_items import MenuItem
 
 
 class OrderDetailBase(BaseModel):
-    amount: int
+    menu_item_id: int
+    quantity: int
 
 
 class OrderDetailCreate(OrderDetailBase):
     order_id: int
-    sandwich_id: int
+    unit_price: Decimal
+
 
 class OrderDetailUpdate(BaseModel):
-    order_id: Optional[int] = None
-    sandwich_id: Optional[int] = None
-    amount: Optional[int] = None
+    quantity: Optional[int] = None
 
 
 class OrderDetail(OrderDetailBase):
     id: int
     order_id: int
-    sandwich: Sandwich = None
+    unit_price: Decimal
+    menu_item: Optional[MenuItem] = None
 
-    class ConfigDict:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
